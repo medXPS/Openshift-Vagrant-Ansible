@@ -106,3 +106,9 @@ sudo sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org
 
 
 ```
+
+
+```
++++
+export VAGRANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible"
++++

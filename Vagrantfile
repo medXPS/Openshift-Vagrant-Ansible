@@ -10,7 +10,7 @@ puts %Q{ This machine has the IP '#{localmachineip} and host name '#{hostname}'}
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = '2'
 
-IS_WSL_USED = true 
+IS_WSL_USED = false 
 
 
 
