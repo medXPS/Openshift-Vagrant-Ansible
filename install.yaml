@@ -1,0 +1,24 @@
+---
+- name: Configure ssh keys
+  hosts: localhost
+  tasks:
+  - command: find /home/vagrant/sync/.vagrant/machines -name private_key
+    register: private_keys
+    changed_when: no
+
+  - file:
+      src: "{{ item }}"
+      dest: "/home/vagrant/.ssh/{{ item | regex_replace('^.*/machines/([^/]*)/.*', '\\1') }}.key"
+      state: link
+    with_items: "{{ private_keys.stdout_lines }}"
+
+- name: Boostrap Admin Host
+  hosts: admin1
+  tasks:
+  - include: tasks/install_bootstrap_origin.yaml
+- name: Add OpenShift Origin repository
+  hosts: all
+  tasks:
+  - yum:
+      name: "centos-release-openshift-origin310"
+      state: present
