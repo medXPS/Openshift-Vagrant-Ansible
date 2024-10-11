@@ -89,3 +89,12 @@ gives
 and that /etc/resolv.conf has an entry
     # Added by landrush, a vagrant plugin
     nameserver 127.0.0.1
+
+
+
+```
+export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+
+
+```

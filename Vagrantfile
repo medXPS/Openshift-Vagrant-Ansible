@@ -93,7 +93,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Update virtual machine to newest version
     master1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
-      yum -y update
+      sudo yum -y update
+      sudo yum -y install network-scripts
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       # Reboot machine
@@ -107,9 +108,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node1.hostmanager.aliases = %w(node1)
 
     node1.vm.provision "shell", inline: <<-SHELL
-      echo "deltarpm_percentage=0" >> /etc/yum.conf
-      yum -y update
-    SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    sudo yum -y update
+    sudo yum -y install network-scripts
+  SHELL
+  
     if Vagrant.has_plugin?('vagrant-reload')
       node1.vm.provision :reload
       #_---------------Fix for centOS 9 stream    
@@ -124,11 +127,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node2.hostmanager.aliases = %w(node2)
 
     node2.vm.provision "shell", inline: <<-SHELL
-      echo "deltarpm_percentage=0" >> /etc/yum.conf
-         #_---------------Fix for centOS 9 stream    
-         yum -y update
-         yum -y install network-scripts
-    SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    sudo yum -y update
+    sudo yum -y install network-scripts
+  SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node2.vm.provision :reload
     end
@@ -143,12 +145,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin1.vm.synced_folder ".vagrant", "/home/vagrant/.hidden", type: "sshfs"
 
     admin1.vm.provision "shell", inline: <<-SHELL
-      echo "deltarpm_percentage=0" >> /etc/yum.conf
-      yum -y update
-         #_---------------Fix for centOS 9 stream    
-         yum -y update
-         yum -y install network-scripts
-    SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    sudo yum -y update
+    sudo yum -y install network-scripts
+  SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       admin1.vm.provision :reload
     end
