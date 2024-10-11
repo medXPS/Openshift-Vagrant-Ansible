@@ -103,13 +103,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node1.vm.network :private_network, ip: "#{NETWORK_BASE}.#{INTEGRATION_START_SEGMENT + 1}"
     node1.vm.hostname = "node1.example.com"
     node1.hostmanager.aliases = %w(node1)
-
-    # Update virtual machine and install network-scripts
+    
     node1.vm.provision "shell", inline: <<-SHELL
-      echo "deltarpm_percentage=0" >> /etc/yum.conf
-      sudo yum -y update
-      sudo yum -y install network-scripts
-    SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    sudo yum -y update
+    sudo yum -y install network-scripts
+  
+    # Restart the interface using NetworkManager commands instead of ifdown/ifup
+    sudo nmcli connection down "System eth1" || true
+    sudo nmcli connection up "System eth1"
+  SHELL
 
     if Vagrant.has_plugin?('vagrant-reload')
       node1.vm.provision :reload
