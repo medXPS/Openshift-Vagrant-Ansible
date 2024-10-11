@@ -12,7 +12,7 @@ VAGRANTFILE_API_VERSION = '2'
 
 deployment_type = 'origin'
 box_name = 'boxomatic/centos-stream-9'
-crio_env =  ENV['OKD_ENABLE_CRIO'] || false
+crio_env = ENV['OKD_ENABLE_CRIO'] || false
 
 enable_crio = false
 if crio_env == "1" || crio_env == "true" || crio_env == "on"
@@ -37,18 +37,15 @@ unless errors.empty?
   fail Vagrant::Errors::VagrantError.new, msg
 end
 
-
 NETWORK_BASE = '192.168.50'
 INTEGRATION_START_SEGMENT = 20
 
 def quote_labels(labels)
-    # Quoting logic for ansible host_vars has changed in Vagrant 2.0
-    # See: https://github.com/hashicorp/vagrant/commit/ac75e409a3470897d56a0841a575e981d60e2e3d
-    if Vagrant::VERSION.to_i >= 2
-      return '{' + labels.map{|k, v| "\"#{k}\": \"#{v}\""}.join(', ') + '}'
-    else
-      return '"{' + labels.map{|k, v| "'#{k}': '#{v}'"}.join(', ') + '}"'
-    end
+  if Vagrant::VERSION.to_i >= 2
+    return '{' + labels.map { |k, v| "\"#{k}\": \"#{v}\"" }.join(', ') + '}'
+  else
+    return '"{' + labels.map { |k, v| "'#{k}': '#{v}'" }.join(', ') + '}"'
+  end
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -94,8 +91,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       sudo yum -y update
-      sudo yum -y install network-scripts
     SHELL
+
     if Vagrant.has_plugin?('vagrant-reload')
       # Reboot machine
       master1.vm.provision :reload
@@ -107,17 +104,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node1.vm.hostname = "node1.example.com"
     node1.hostmanager.aliases = %w(node1)
 
+    # Update virtual machine and install network-scripts
     node1.vm.provision "shell", inline: <<-SHELL
-    echo "deltarpm_percentage=0" >> /etc/yum.conf
-    sudo yum -y update
-    sudo yum -y install network-scripts
-  SHELL
-  
+      echo "deltarpm_percentage=0" >> /etc/yum.conf
+      sudo yum -y update
+      sudo yum -y install network-scripts
+    SHELL
+
     if Vagrant.has_plugin?('vagrant-reload')
       node1.vm.provision :reload
-      #_---------------Fix for centOS 9 stream    
-      yum -y update
-      yum -y install network-scripts
     end
   end
 
@@ -126,11 +121,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node2.vm.hostname = "node2.example.com"
     node2.hostmanager.aliases = %w(node2)
 
+    # Update virtual machine and install network-scripts
     node2.vm.provision "shell", inline: <<-SHELL
-    echo "deltarpm_percentage=0" >> /etc/yum.conf
-    sudo yum -y update
-    sudo yum -y install network-scripts
-  SHELL
+      echo "deltarpm_percentage=0" >> /etc/yum.conf
+      sudo yum -y update
+      sudo yum -y install network-scripts
+    SHELL
+
     if Vagrant.has_plugin?('vagrant-reload')
       node2.vm.provision :reload
     end
@@ -144,11 +141,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin1.vm.synced_folder ".", "/home/vagrant/sync", type: "sshfs"
     admin1.vm.synced_folder ".vagrant", "/home/vagrant/.hidden", type: "sshfs"
 
+    # Update virtual machine and install network-scripts
     admin1.vm.provision "shell", inline: <<-SHELL
-    echo "deltarpm_percentage=0" >> /etc/yum.conf
-    sudo yum -y update
-    sudo yum -y install network-scripts
-  SHELL
+      echo "deltarpm_percentage=0" >> /etc/yum.conf
+      sudo yum -y update
+      sudo yum -y install network-scripts
+    SHELL
+
     if Vagrant.has_plugin?('vagrant-reload')
       admin1.vm.provision :reload
     end
@@ -173,7 +172,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         openshift_hosted_registry_replicas: 1,
         openshift_hosted_router_selector: 'node-role.kubernetes.io/master=true',
         openshift_hosted_registry_selector: 'node-role.kubernetes.io/master=true',
-        openshift_enable_unsupported_configurations: true, # Needed for NFS registry. For some unknown reason.
+        openshift_enable_unsupported_configurations: true,
         openshift_hosted_registry_storage_kind: 'nfs',
         openshift_hosted_registry_storage_access_modes: ['ReadWriteMany'],
         openshift_hosted_registry_storage_host: 'admin1.example.com',
@@ -217,19 +216,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
 
     admin1.vm.provision :ansible_local do |ansible|
-      ansible.verbose        = true
-      ansible.install        = true
-      ansible.limit          = 'OSEv3:localhost'
+      ansible.verbose = true
+      ansible.install = true
+      ansible.limit = 'OSEv3:localhost'
       ansible.provisioning_path = '/home/vagrant/sync'
-      ansible.playbook       = '/home/vagrant/sync/install.yaml'
+      ansible.playbook = '/home/vagrant/sync/install.yaml'
       ansible.groups = ansible_groups
       ansible.host_vars = ansible_host_vars
     end
 
     admin1.vm.provision :ansible_local do |ansible|
-      ansible.verbose        = true
-      ansible.install        = false
-      ansible.limit          = "OSEv3:localhost"
+      ansible.verbose = true
+      ansible.install = false
+      ansible.limit = "OSEv3:localhost"
       ansible.provisioning_path = '/home/vagrant/sync'
       ansible.playbook = "/home/vagrant/openshift-ansible/playbooks/prerequisites.yml"
       ansible.groups = ansible_groups
@@ -237,9 +236,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     admin1.vm.provision :ansible_local do |ansible|
-      ansible.verbose        = true
-      ansible.install        = false
-      ansible.limit          = "OSEv3:localhost"
+      ansible.verbose = true
+      ansible.install = false
+      ansible.limit = "OSEv3:localhost"
       ansible.provisioning_path = '/home/vagrant/sync'
       ansible.playbook = "/home/vagrant/openshift-ansible/playbooks/deploy_cluster.yml"
       ansible.groups = ansible_groups
@@ -247,9 +246,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     admin1.vm.provision :ansible_local do |ansible|
-      ansible.verbose        = true
-      ansible.install        = false
-      ansible.limit          = "OSEv3:localhost"
+      ansible.verbose = true
+      ansible.install = false
+      ansible.limit = "OSEv3:localhost"
       ansible.provisioning_path = '/home/vagrant/sync'
       ansible.playbook = "/home/vagrant/sync/tasks/post-install.yaml"
       ansible.groups = ansible_groups
