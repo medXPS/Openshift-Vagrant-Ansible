@@ -112,6 +112,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node1.vm.provision :reload
+      #_---------------Fix for centOS 9 stream    
+      yum -y update
+      yum -y install network-scripts
     end
   end
 
@@ -122,7 +125,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     node2.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
-      yum -y update
+         #_---------------Fix for centOS 9 stream    
+         yum -y update
+         yum -y install network-scripts
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node2.vm.provision :reload
@@ -140,6 +145,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       yum -y update
+         #_---------------Fix for centOS 9 stream    
+         yum -y update
+         yum -y install network-scripts
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       admin1.vm.provision :reload
