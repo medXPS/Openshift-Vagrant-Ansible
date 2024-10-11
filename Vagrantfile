@@ -11,7 +11,7 @@ puts %Q{ This machine has the IP '#{localmachineip} and host name '#{hostname}'}
 VAGRANTFILE_API_VERSION = '2'
 
 deployment_type = 'origin'
-box_name = 'centos/7'
+box_name = 'boxomatic/centos-stream-9'
 crio_env =  ENV['OKD_ENABLE_CRIO'] || false
 
 enable_crio = false
