@@ -5,7 +5,7 @@ require 'socket'
 
 hostname = Socket.gethostname
 localmachineip = IPSocket.getaddress(Socket.gethostname)
-puts %Q{ This machine has the IP '#{localmachineip} and host name '#{hostname}'}
+puts %Q{ This machine has the IP '#{localmachineip}' and host name '#{hostname}'}
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = '2'
