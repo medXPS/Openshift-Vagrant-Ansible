@@ -95,7 +95,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Bindfs configuration for shared folders
-  config.bindfs.bind_folder '//wsl.localhost/Ubuntu/home/devops/openshift/Openshift-Vagrant-Ansible', '/home/vagrant/sync',
+  config.bindfs.bind_folder '/home/devops/openshift/Openshift-Vagrant-Ansible', '/home/vagrant/sync',
                              owner: "vagrant",
                              group: "vagrant",
                              perms: "0775",
@@ -103,7 +103,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                              chgrp_ignore: true,
                              chmod_ignore: true
 
-  config.bindfs.bind_folder '//wsl.localhost/Ubuntu/home/devops/openshift/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden',
+  config.bindfs.bind_folder '/home/devops/openshift/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden',
                              owner: "vagrant",
                              group: "vagrant",
                              perms: "0600",
@@ -122,6 +122,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       yum -y update
       yum -y install python38 python38-pip
+      yum -y install fuse-devel
     SHELL
 
     # Reboot the machine if vagrant-reload plugin is available
@@ -138,6 +139,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       yum -y update
       yum -y install python38 python38-pip
+      yum -y install fuse-devel
     SHELL
 
     node1.vm.provision :reload if Vagrant.has_plugin?('vagrant-reload')
@@ -152,7 +154,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node2.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       yum -y update
-      yum -y install python38 python38-pip
+      yum -y install python38 python38-
+      yum -y install fuse-devel
     SHELL
 
     node2.vm.provision :reload if Vagrant.has_plugin?('vagrant-reload')
@@ -200,6 +203,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       yum -y install python38 python38-pip
       pip3.8 install --upgrade pip
       pip3.8 install ansible==2.9.27 pyOpenSSL
+      yum -y install fuse-devel
     SHELL
 
     # Reboot the machine if vagrant-reload plugin is available
