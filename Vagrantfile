@@ -203,62 +203,62 @@ end
       nodes: ["master1", "node1", "node2"],
     }
 
-    # ansible_host_vars = {
-    #   master1:  {
-    #     openshift_ip: '192.168.50.20',
-    #     openshift_schedulable: true,
-    #     ansible_host: '192.168.50.20',
-    #     ansible_ssh_private_key_file: "/home/vagrant/.ssh/master1.key",
-    #     openshift_node_group_name: "node-config-master"
-    #   },
-    #   node1: {
-    #     openshift_ip: '192.168.50.21',
-    #     openshift_schedulable: true,
-    #     ansible_host: '192.168.50.21',
-    #     ansible_ssh_private_key_file: "/home/vagrant/.ssh/node1.key",
-    #     openshift_node_group_name: "node-config-compute"
-    #   },
-    #   node2: {
-    #     openshift_ip: '192.168.50.22',
-    #     openshift_schedulable: true,
-    #     ansible_host: '192.168.50.22',
-    #     ansible_ssh_private_key_file: "/home/vagrant/.ssh/node2.key",
-    #     openshift_node_group_name: "node-config-compute"
-    #   },
-    #   admin1: {
-    #     ansible_connection: 'local',
-    #     deployment_type: deployment_type
-    #   }
-    # }
+    ansible_host_vars = {
+      master1:  {
+        openshift_ip: '192.168.50.20',
+        openshift_schedulable: true,
+        ansible_host: '192.168.50.20',
+        ansible_ssh_private_key_file: "/home/vagrant/.ssh/master1.key",
+        openshift_node_group_name: "node-config-master"
+      },
+      node1: {
+        openshift_ip: '192.168.50.21',
+        openshift_schedulable: true,
+        ansible_host: '192.168.50.21',
+        ansible_ssh_private_key_file: "/home/vagrant/.ssh/node1.key",
+        openshift_node_group_name: "node-config-compute"
+      },
+      node2: {
+        openshift_ip: '192.168.50.22',
+        openshift_schedulable: true,
+        ansible_host: '192.168.50.22',
+        ansible_ssh_private_key_file: "/home/vagrant/.ssh/node2.key",
+        openshift_node_group_name: "node-config-compute"
+      },
+      admin1: {
+        ansible_connection: 'local',
+        deployment_type: deployment_type
+      }
+    }
 #-------------------issue fix 
 
-ansible_host_vars = {
-  master1: {
-    openshift_ip: '192.168.50.20',
-    openshift_schedulable: true,
-    ansible_host: '127.0.0.1',
-    ansible_port: 2222,  # Replace with the actual port from `vagrant ssh-config`
-    openshift_node_group_name: "node-config-master"
-  },
-  node1: {
-    openshift_ip: '192.168.50.21',
-    openshift_schedulable: true,
-    ansible_host: '127.0.0.1',
-    ansible_port: 2200,  # Replace with the actual port
-    openshift_node_group_name: "node-config-compute"
-  },
-  node2: {
-    openshift_ip: '192.168.50.22',
-    openshift_schedulable: true,
-    ansible_host: '127.0.0.1',
-    ansible_port: 2201,  # Replace with the actual port
-    openshift_node_group_name: "node-config-compute"
-  },
-  admin1: {
-    ansible_connection: 'local',
-    deployment_type: deployment_type
-  }
-}
+# ansible_host_vars = {
+#   master1: {
+#     openshift_ip: '192.168.50.20',
+#     openshift_schedulable: true,
+#     ansible_host: '127.0.0.1',
+#     ansible_port: 2222,  # Replace with the actual port from `vagrant ssh-config`
+#     openshift_node_group_name: "node-config-master"
+#   },
+#   node1: {
+#     openshift_ip: '192.168.50.21',
+#     openshift_schedulable: true,
+#     ansible_host: '127.0.0.1',
+#     ansible_port: 2200,  # Replace with the actual port
+#     openshift_node_group_name: "node-config-compute"
+#   },
+#   node2: {
+#     openshift_ip: '192.168.50.22',
+#     openshift_schedulable: true,
+#     ansible_host: '127.0.0.1',
+#     ansible_port: 2201,  # Replace with the actual port
+#     openshift_node_group_name: "node-config-compute"
+#   },
+#   admin1: {
+#     ansible_connection: 'local',
+#     deployment_type: deployment_type
+#   }
+# }
 
     admin1.vm.provision :ansible_local do |ansible|
       ansible.verbose        = true
