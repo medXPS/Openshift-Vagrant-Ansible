@@ -18,10 +18,6 @@
     regexp: '^enabled=1'
     replace: 'enabled=0'
 - yum:
-    name: ['ansible']
+    name: ['ansible-2.9.*']
     enablerepo: epel
     state: present
-- name: Install pyOpenSSL using pip
-  pip:
-    name: pyOpenSSL
-  become: yes
