@@ -94,8 +94,8 @@ if !IS_WSL_USED
   config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
 else
   # If WSL is used, point to the Windows file system
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
+  config.vm.synced_folder '//wsl.localhost/Ubuntu/home/devops/openshift//Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
+  config.vm.synced_folder '//wsl.localhost/Ubuntu/home/devops/openshift//Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
 end
   config.vm.define "master1" do |master1|
     master1.vm.network :private_network, ip: "#{NETWORK_BASE}.#{INTEGRATION_START_SEGMENT}"
@@ -150,9 +150,10 @@ end
     admin1.hostmanager.aliases = %w(admin1)
 
     # If WSL is used, point to the Windows file system
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden',type: "rsync"
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
+    config.vm.synced_folder '//wsl.localhost/Ubuntu/home/devops/openshift/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
+
+  config.vm.synced_folder '//wsl.localhost/Ubuntu/home/devops/openshift//Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden',type: "rsync"
+  config.vm.synced_folder '//wsl.localhost/Ubuntu/home/devops/openshift//Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
 
     admin1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
