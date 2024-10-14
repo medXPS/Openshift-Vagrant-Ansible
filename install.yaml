@@ -2,23 +2,41 @@
 - name: Configure ssh keys
   hosts: localhost
   tasks:
-  - command: find /home/vagrant/sync/.vagrant/machines -name private_key
-    register: private_keys
-    changed_when: no
+    # Find the private keys in the Vagrant folder
+    - command: find /home/vagrant/sync/.vagrant/machines -name private_key
+      register: private_keys
+      changed_when: no
 
-  - file:
-      src: "{{ item }}"
-      dest: "/home/vagrant/.ssh/{{ item | regex_replace('^.*/machines/([^/]*)/.*', '\\1') }}.key"
-      state: link
-    with_items: "{{ private_keys.stdout_lines }}"
+    # Create symlinks for the private keys and set correct permissions (0600)
+    - file:
+        src: "{{ item }}"
+        dest: "/home/vagrant/.ssh/{{ item | regex_replace('^.*/machines/([^/]*)/.*', '\\1') }}.key"
+        state: link
+        mode: '0600'  # Fix permission issue for SSH private keys
+        owner: vagrant
+        group: vagrant
+      with_items: "{{ private_keys.stdout_lines }}"
 
-- name: Boostrap Admin Host
+- name: Bootstrap Admin Host
   hosts: admin1
   tasks:
-  - include: tasks/install_bootstrap_origin.yaml
-- name: Add OpenShift Origin repository
+    - include: tasks/install_bootstrap_origin.yaml
+
+- name: Add OpenShift Origin repository (alternative for CentOS 8)
   hosts: all
   tasks:
-  - yum:
-      name: "centos-release-openshift-origin310"
-      state: present
+    - name: Enable CentOS 8 PowerTools and EPEL repositories
+      yum:
+        name:
+          - epel-release
+          - centos-release-stream
+        state: present
+
+    - name: Install necessary dependencies for OpenShift on CentOS 8
+      yum:
+        name:
+          - wget
+          - docker
+          - git
+          - ansible
+        state: present
