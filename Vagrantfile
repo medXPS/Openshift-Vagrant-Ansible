@@ -158,6 +158,7 @@ end
       yum -y install python38 python38-pip
       pip3.8 install --upgrade pip
       pip3.8 install ansible==2.9.27  # Install compatible version of Ansible
+      pip3.8 install pyOpenSSL
 
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')

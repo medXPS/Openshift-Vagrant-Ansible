@@ -11,13 +11,9 @@
   become: yes
   become_user: vagrant
 - package:
-    name: http://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    name: epel-release
     state: present
 - replace:
     dest: /etc/yum.repos.d/epel.repo
     regexp: '^enabled=1'
     replace: 'enabled=0'
-- yum:
-    name: ['ansible-2.9.*']
-    enablerepo: epel
-    state: present
