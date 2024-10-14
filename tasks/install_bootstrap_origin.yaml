@@ -1,4 +1,3 @@
----
 - package:
     name: git
     state: present
@@ -8,7 +7,7 @@
     force: yes
     update: yes
     recursive: yes
-    version: openshift-ansible-4.17
+    version: release-4.17  # Replace with a valid branch/tag name
   become: yes
   become_user: vagrant
 - package:
@@ -23,5 +22,5 @@
     enablerepo: epel
     state: present
   with_items:
-  - ansible
-  - pyOpenSSL
+    - ansible
+    - pyOpenSSL
