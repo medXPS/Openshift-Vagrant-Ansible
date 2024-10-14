@@ -132,7 +132,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     %w[master1 node1 node2].each do |vm_name|
       admin1.vm.provision "shell", inline: <<-SHELL
         ssh-keyscan #{vm_name}.example.com >> /home/vagrant/.ssh/known_hosts
-        cat /vagrant/#{vm_name}_id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
+        cat /home/vagrant/sync/.vagrant/machines/#{vm_name}/virtualbox/private_key >> /home/vagrant/.ssh/authorized_keys
         chmod 600 /home/vagrant/.ssh/authorized_keys
       SHELL
     end
