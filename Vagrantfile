@@ -151,15 +151,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin1.hostmanager.aliases = %w(admin1)
 
     # If WSL is used, point to the Windows file system
-# config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
-# config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
-# config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
-
+# Change these paths to use /mnt/c/... paths for compatibility with WSL
 config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
 config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
-config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/syn',type: "rsync"
-
-#_-------------
+config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
 
     admin1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
