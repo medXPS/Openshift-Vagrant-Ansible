@@ -70,12 +70,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Suppress the default sync in both CentOS base and CentOS Atomic Host
   if !IS_WSL_USED
     # If WSL is not used, disable the default sync
-    config.vm.synced_folder '.', '/vagrant', disabled: true
-    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/vagrant', type: 'virtualbox'
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: 'virtualbox'
   else
     # If WSL is used, point to the Windows file system
-    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
-    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: 'virtualbox'
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: 'virtualbox'
   end
 
   config.vm.provider "virtualbox" do |v, override|
@@ -147,7 +147,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # If WSL is used, point to the Windows file system
     config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
-    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: 'virtualbox'
 
     admin1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
