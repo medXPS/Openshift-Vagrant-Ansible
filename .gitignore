@@ -31,3 +31,4 @@ roles/infra-ansible/
 roles/openshift-ansible/
 pytestdebug.log
 .cache
+.vagrant.d/
