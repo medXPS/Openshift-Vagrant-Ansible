@@ -15,7 +15,7 @@ IS_WSL_USED = true
 
 
 deployment_type = 'origin'
-box_name = 'centos/8'
+box_name = 'boxomatic/centos-stream-9'
 crio_env =  ENV['OKD_ENABLE_CRIO'] || false
 
 enable_crio = false
@@ -94,6 +94,7 @@ if !IS_WSL_USED
   config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
 else
   # If WSL is used, point to the Windows file system
+  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/vagrant', type: "rsync"
   config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
   config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
 end
@@ -150,8 +151,9 @@ end
     admin1.hostmanager.aliases = %w(admin1)
 
     # If WSL is used, point to the Windows file system
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/vagrant', type: "rsync"
   config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden',type: "rsync"
+ 
   config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
 
     admin1.vm.provision "shell", inline: <<-SHELL
