@@ -90,8 +90,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
   # If WSL is used, point to the Windows file system
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync",disable: "true"
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync",disable: "true"
+  config.vm.synced_folder '.', '/home/vagrant/sync', type: "rsync",disable: "true"
+  config.vm.synced_folder './.vagrant', '/home/vagrant/.hidden', type: "rsync",disable: "true"
 
   config.vm.define "master1" do |master1|
     master1.vm.network :private_network, ip: "#{NETWORK_BASE}.#{INTEGRATION_START_SEGMENT}"
@@ -147,9 +147,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # If WSL is used, point to the Windows file system
     # If WSL is used, point to the Windows file system
-    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync",disable: "true"
-    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden',type: "rsync",disable: "true"
-    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', disable: "true"
+    config.vm.synced_folder '.', '/home/vagrant/sync', type: "rsync",disable: "true"
+    config.vm.synced_folder './.vagrant', '/home/vagrant/.hidden',type: "rsync",disable: "true"
+    config.vm.synced_folder './.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', disable: "true"
   
 
     admin1.vm.provision "shell", inline: <<-SHELL
