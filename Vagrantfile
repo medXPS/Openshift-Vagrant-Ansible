@@ -15,7 +15,13 @@ IS_WSL_USED = true
 
 
 deployment_type = 'origin'
-box_name = 'centos/8'
+
+
+#----------------------------UpgrAde this shitty shit 
+box_name = 'centos/stream9'                               # <<<<<<------------------- o_o
+#----------------------------------------------------
+
+
 crio_env =  ENV['OKD_ENABLE_CRIO'] || false
 
 enable_crio = false
