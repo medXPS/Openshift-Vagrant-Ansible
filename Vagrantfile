@@ -5,7 +5,7 @@ require 'socket'
 
 hostname = Socket.gethostname
 localmachineip = IPSocket.getaddress(Socket.gethostname)
-puts %Q{ This machine has the IP '#{localmachineip} and host name '#{hostname}'}
+puts %Q{ This machine has the IP '#{localmachineip}' and host name '#{hostname}'}
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = '2'
@@ -35,7 +35,7 @@ errors = []
 # Validate and collect error message if plugin is not installed
 REQUIRED_PLUGINS.each { |plugin| errors << message(plugin) unless Vagrant.has_plugin?(plugin) }
 unless errors.empty?
-  msg = errors.size > 1 ? "Errors: \n* #{errors.join("\n* "}" : "Error: #{errors.first}"
+  msg = errors.size > 1 ? "Errors: \n* #{errors.join("\n* ")}" : "Error: #{errors.first}"
   fail Vagrant::Errors::VagrantError.new, msg
 end
 
@@ -46,9 +46,9 @@ def quote_labels(labels)
     # Quoting logic for ansible host_vars has changed in Vagrant 2.0
     # See: https://github.com/hashicorp/vagrant/commit/ac75e409a3470897d56a0841a575e981d60e2e3d
     if Vagrant::VERSION.to_i >= 2
-      return '{' + labels.map{|k, v| "\"#{k}\": \"#{v}\""}.join(', ') + '}'
+      return '{' + labels.map { |k, v| "\"#{k}\": \"#{v}\"" }.join(', ') + '}'
     else
-      return '"{' + labels.map{|k, v| "'#{k}': '#{v}'"}.join(', ') + '}"'
+      return '"{' + labels.map { |k, v| "'#{k}': '#{v}'" }.join(', ') + '}"'
     end
 end
 
