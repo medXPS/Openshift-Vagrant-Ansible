@@ -155,9 +155,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 # config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
 # config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
 
-config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "nfs"
-config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "nfs"
-config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/syn',type: "nfs"
+config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
+config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
+config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/syn',type: "rsync"
 
 #_-------------
 
