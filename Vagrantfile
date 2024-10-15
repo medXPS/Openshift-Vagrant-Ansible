@@ -5,14 +5,12 @@ require 'socket'
 
 hostname = Socket.gethostname
 localmachineip = IPSocket.getaddress(Socket.gethostname)
-puts %Q{ This machine has the IP '#{localmachineip} and host name '#{hostname}'}
+puts %Q{ This machine has the IP '#{localmachineip}' and host name '#{hostname}'}
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = '2'
 
 IS_WSL_USED = true 
-
-
 
 deployment_type = 'origin'
 box_name = 'boxomatic/centos-stream-9'
@@ -41,7 +39,6 @@ unless errors.empty?
   fail Vagrant::Errors::VagrantError.new, msg
 end
 
-
 NETWORK_BASE = '192.168.50'
 INTEGRATION_START_SEGMENT = 20
 
@@ -49,9 +46,9 @@ def quote_labels(labels)
     # Quoting logic for ansible host_vars has changed in Vagrant 2.0
     # See: https://github.com/hashicorp/vagrant/commit/ac75e409a3470897d56a0841a575e981d60e2e3d
     if Vagrant::VERSION.to_i >= 2
-      return '{' + labels.map{|k, v| "\"#{k}\": \"#{v}\""}.join(', ') + '}'
+      return '{' + labels.map { |k, v| "\"#{k}\": \"#{v}\"" }.join(', ') + '}'
     else
-      return '"{' + labels.map{|k, v| "'#{k}': '#{v}'"}.join(', ') + '}"'
+      return '"{' + labels.map { |k, v| "'#{k}': '#{v}'" }.join(', ') + '}"'
     end
 end
 
@@ -70,6 +67,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure eth0 via script, will disable NetworkManager and enable legacy network daemon:
   config.vm.provision "shell", path: "provision/setup.sh", args: [NETWORK_BASE]
 
+  # Suppress the default sync in both CentOS base and CentOS Atomic Host
+  if !IS_WSL_USED
+    # If WSL is not used, disable the default sync
+    config.vm.synced_folder '.', '/vagrant', disabled: true
+    config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+  else
+    # If WSL is used, point to the Windows file system
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
+  end
+
   config.vm.provider "virtualbox" do |v, override|
     v.memory = 2048
     v.cpus = 1
@@ -84,30 +92,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box = box_name
     provider_name = 'libvirt'
   end
- 
-  # Suppress the default sync in both CentOS base and CentOS Atomic Host
-# Suppress the default sync in both CentOS base and CentOS Atomic Host
 
-if !IS_WSL_USED
-  # If WSL is not used, use the default sync
-  config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
-else
-  # If WSL is used, point to the Windows file system
-
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "rsync"
-end
+  # Define VM instances
   config.vm.define "master1" do |master1|
     master1.vm.network :private_network, ip: "#{NETWORK_BASE}.#{INTEGRATION_START_SEGMENT}"
     master1.vm.hostname = "master1.example.com"
     master1.hostmanager.aliases = %w(master1)
 
-    # Update virtual machine to newest version
     master1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       yum -y update
-       yum -y install python38 python38-pip
+      yum -y install python38 python38-pip
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       # Reboot machine
@@ -123,7 +118,7 @@ end
     node1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       yum -y update
-       yum -y install python38 python38-pip
+      yum -y install python38 python38-pip
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node1.vm.provision :reload
@@ -138,7 +133,7 @@ end
     node2.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
       yum -y update
-       yum -y install python38 python38-pip
+      yum -y install python38 python38-pip
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node2.vm.provision :reload
@@ -151,20 +146,16 @@ end
     admin1.hostmanager.aliases = %w(admin1)
 
     # If WSL is used, point to the Windows file system
-
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
- 
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "rsync"
+    config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines', '/home/vagrant/sync/.vagrant/machines', type: "rsync"
 
     admin1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
-      yum -y update
       yum -y update
       yum -y install python38 python38-pip
       pip3.8 install --upgrade pip
       pip3.8 install ansible==2.9.27  # Install compatible version of Ansible
       pip3.8 install pyOpenSSL
-
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       admin1.vm.provision :reload
@@ -202,65 +193,36 @@ end
       etcd: ["master1"],
       nfs: ["admin1"],
       masters: ["master1"],
-      nodes: ["master1", "node1", "node2"],
+      nodes: ["master1", "node1", "node2"]
     }
 
-    # ansible_host_vars = {
-    #   master1:  {
-    #     openshift_ip: '192.168.50.20',
-    #     openshift_schedulable: true,
-    #     ansible_host: '192.168.50.20',
-    #     ansible_ssh_private_key_file: "/home/vagrant/.ssh/master1.key",
-    #     openshift_node_group_name: "node-config-master"
-    #   },
-    #   node1: {
-    #     openshift_ip: '192.168.50.21',
-    #     openshift_schedulable: true,
-    #     ansible_host: '192.168.50.21',
-    #     ansible_ssh_private_key_file: "/home/vagrant/.ssh/node1.key",
-    #     openshift_node_group_name: "node-config-compute"
-    #   },
-    #   node2: {
-    #     openshift_ip: '192.168.50.22',
-    #     openshift_schedulable: true,
-    #     ansible_host: '192.168.50.22',
-    #     ansible_ssh_private_key_file: "/home/vagrant/.ssh/node2.key",
-    #     openshift_node_group_name: "node-config-compute"
-    #   },
-    #   admin1: {
-    #     ansible_connection: 'local',
-    #     deployment_type: deployment_type
-    #   }
-    # }
-#-------------------issue fix 
-
-ansible_host_vars = {
-  master1: {
-    openshift_ip: '192.168.50.20',
-    openshift_schedulable: true,
-    ansible_host: '127.0.0.1',
-    ansible_port: 2222,  # Replace with the actual port from `vagrant ssh-config`
-    openshift_node_group_name: "node-config-master"
-  },
-  node1: {
-    openshift_ip: '192.168.50.21',
-    openshift_schedulable: true,
-    ansible_host: '127.0.0.1',
-    ansible_port: 2200,  # Replace with the actual port
-    openshift_node_group_name: "node-config-compute"
-  },
-  node2: {
-    openshift_ip: '192.168.50.22',
-    openshift_schedulable: true,
-    ansible_host: '127.0.0.1',
-    ansible_port: 2201,  # Replace with the actual port
-    openshift_node_group_name: "node-config-compute"
-  },
-  admin1: {
-    ansible_connection: 'local',
-    deployment_type: deployment_type
-  }
-}
+    ansible_host_vars = {
+      master1: {
+        openshift_ip: '192.168.50.20',
+        openshift_schedulable: true,
+        ansible_host: '127.0.0.1',
+        ansible_port: 2222,  # Replace with the actual port from `vagrant ssh-config`
+        openshift_node_group_name: "node-config-master"
+      },
+      node1: {
+        openshift_ip: '192.168.50.21',
+        openshift_schedulable: true,
+        ansible_host: '127.0.0.1',
+        ansible_port: 2200,  # Replace with the actual port
+        openshift_node_group_name: "node-config-compute"
+      },
+      node2: {
+        openshift_ip: '192.168.50.22',
+        openshift_schedulable: true,
+        ansible_host: '127.0.0.1',
+        ansible_port: 2201,  # Replace with the actual port
+        openshift_node_group_name: "node-config-compute"
+      },
+      admin1: {
+        ansible_connection: 'local',
+        deployment_type: deployment_type
+      }
+    }
 
     admin1.vm.provision :ansible_local do |ansible|
       ansible.verbose        = true
@@ -303,5 +265,3 @@ ansible_host_vars = {
     end
   end
 end
-
-
