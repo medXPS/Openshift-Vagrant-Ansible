@@ -18,7 +18,7 @@ deployment_type = 'origin'
 
 
 #----------------------------UpgrAde this shitty shit 
-box_name = 'centos/stream9'                               # <<<<<<------------------- o_o
+box_name = 'boxomatic/centos-stream-9'                               # <<<<<<------------------- o_o
 #----------------------------------------------------
 
 
