@@ -88,16 +88,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Suppress the default sync in both CentOS base and CentOS Atomic Host
 # Suppress the default sync in both CentOS base and CentOS Atomic Host
 
-if !IS_WSL_USED
-  # If WSL is not used, use the default sync
-  config.vm.synced_folder '.', '/vagrant', disabled: true
-  config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
-else
-  # If WSL is used, point to the Windows file system
+# if !IS_WSL_USED
+#   # If WSL is not used, use the default sync
+#   config.vm.synced_folder '.', '/vagrant', disabled: true
+#   config.vm.synced_folder '.', '/home/vagrant/sync', disabled: true
+# else
+#   # If WSL is used, point to the Windows file system
 
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "virtualbox"
-  config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "virtualbox"
-end
+#   config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible', '/home/vagrant/sync', type: "virtualbox"
+#   config.vm.synced_folder '/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant', '/home/vagrant/.hidden', type: "virtualbox"
+# end
   config.vm.define "master1" do |master1|
     master1.vm.network :private_network, ip: "#{NETWORK_BASE}.#{INTEGRATION_START_SEGMENT}"
     master1.vm.hostname = "master1.example.com"
