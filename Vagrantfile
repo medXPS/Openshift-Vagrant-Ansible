@@ -147,13 +147,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin1.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines", "/home/vagrant/machines", type: "rsync"
 
     admin1.vm.provision "shell", inline: <<-SHELL
-      echo "deltarpm_percentage=0" >> /etc/yum.conf
-      yum -y update
-      yum -y install python38 python38-pip
-      pip3.8 install --upgrade pip
-      pip3.8 install ansible==2.9.27  # Install compatible version of Ansible
-      pip3.8 install pyOpenSSL
-    SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    yum -y update
+    yum -y install python39 python39-pip  # Install Python 3.9 and pip3.9
+    pip3.9 install --upgrade pip
+    pip3.9 install ansible==2.9.27  # Install compatible version of Ansible
+    pip3.9 install pyOpenSSL
+  SHELL
+  
     if Vagrant.has_plugin?('vagrant-reload')
       admin1.vm.provision :reload
     end
