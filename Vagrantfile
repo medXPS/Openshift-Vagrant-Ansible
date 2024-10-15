@@ -143,8 +143,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin1.vm.hostname = "admin1.example.com"
     admin1.hostmanager.aliases = %w(admin1)
 
-    admin1.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "sshfs"
-    admin1.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines", "/home/vagrant/machines", type: "sshfs"
+    admin1.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "rsync"
+    admin1.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible/.vagrant/machines", "/home/vagrant/machines", type: "rsync"
 
     admin1.vm.provision "shell", inline: <<-SHELL
       echo "deltarpm_percentage=0" >> /etc/yum.conf
