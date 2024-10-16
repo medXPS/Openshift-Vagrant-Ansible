@@ -152,9 +152,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin1.vm.provision "shell", inline: <<-SHELL
     echo "deltarpm_percentage=0" >> /etc/yum.conf
     yum -y update
-    yum -y install python3 python3-pip  # Install Python 3.9 and pip3
+    yum -y install python3 python3-pip  
     pip3 install --upgrade pip
-    pip3 install ansible==2.9.27  # Install compatible version of Ansible
+    pip3 install ansible==2.9.27  
     pip3 install pyOpenSSL
     yum install -y python3-libselinux
   SHELL
