@@ -90,19 +90,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master1.vm.hostname = "master1.example.com"
     master1.hostmanager.aliases = %w(master1)
 
-    # Update virtual machine to newest version
-    master1.vm.provision "shell", inline: <<-SHELL
-      echo "deltarpm_percentage=0" >> /etc/yum.conf
-      yum -y update
-      yum -y install python3 python3-pip  # Install Python 3.9 and pip3
-      pip3 install --upgrade pip
-      pip3 install pyOpenSSL
-      yum install -y python3-libselinux
-    SHELL
-    if Vagrant.has_plugin?('vagrant-reload')
-      # Reboot machine
-      master1.vm.provision :reload
-    end
+    # # Update virtual machine to newest version
+    # master1.vm.provision "shell", inline: <<-SHELL
+    #   echo "deltarpm_percentage=0" >> /etc/yum.conf
+    #   yum -y update
+    #   yum -y install python3 python3-pip  # Install Python 3.9 and pip3
+    #   pip3 install --upgrade pip
+    #   pip3 install pyOpenSSL
+    #   yum install -y python3-libselinux
+    # SHELL
+    # if Vagrant.has_plugin?('vagrant-reload')
+    #   # Reboot machine
+    #   master1.vm.provision :reload
+    # end
   end
 
   config.vm.define "node1" do |node1|
