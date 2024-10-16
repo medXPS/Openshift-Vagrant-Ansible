@@ -33,19 +33,31 @@
           - git
         state: present
 
+- name: Boostrap Admin Host
+  hosts: admin1
+  tasks:
+    - include: tasks/install_bootstrap_origin.yaml
+
 - name: Install OpenShift 4.17 Client (oc)
   hosts: all
   tasks:
+    - name: Check if OpenShift CLI (oc) is already installed
+      stat:
+        path: /usr/local/bin/oc
+      register: oc_installed
+
     - name: Download OpenShift CLI
       get_url:
         url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.17/openshift-client-linux.tar.gz
         dest: /tmp/openshift-client-linux.tar.gz
+      when: oc_installed.stat.exists == False
 
     - name: Extract OpenShift CLI
       unarchive:
         src: /tmp/openshift-client-linux.tar.gz
         dest: /usr/local/bin
         remote_src: yes
+      when: oc_installed.stat.exists == False
 
     - name: Ensure OpenShift CLI is executable
       file:
