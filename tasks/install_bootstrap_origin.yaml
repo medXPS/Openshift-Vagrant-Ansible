@@ -1,15 +1,15 @@
 - package:
     name: git
     state: present
-- git:
-    repo: https://github.com/openshift/openshift-ansible
-    dest: ~/openshift-ansible
-    force: yes
-    update: yes
-    recursive: yes
-    version: release-3.11  # Replace with a valid branch/tag name
-  become: yes
-  become_user: vagrant
+# - git:
+#     repo: https://github.com/openshift/openshift-ansible
+#     dest: ~/openshift-ansible
+#     force: yes
+#     update: yes
+#     recursive: yes
+#     version: release-3.11  # Replace with a valid branch/tag name
+#   become: yes
+#   become_user: vagrant
 - package:
     name: epel-release
     state: present

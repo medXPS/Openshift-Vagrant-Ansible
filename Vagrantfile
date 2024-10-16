@@ -156,7 +156,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     pip3 install --upgrade pip
     pip3 install ansible==2.9.27  # Install compatible version of Ansible
     pip3 install pyOpenSSL
-    yum install -y python3-libselinux
+    yum install -y libselinux-python
   SHELL
   
     if Vagrant.has_plugin?('vagrant-reload')
