@@ -133,6 +133,12 @@
         port: 22
         delay: 30
         timeout: 600
+    - name: Wait for worker nodes to be ready
+      wait_for:
+        host: 192.168.50.22
+        port: 22
+        delay: 30
+        timeout: 600
 
     - name: Create OpenShift cluster
       command: "openshift-install create cluster --dir {{ install_dir }}"
