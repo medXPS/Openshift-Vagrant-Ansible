@@ -7,7 +7,7 @@
     force: yes
     update: yes
     recursive: yes
-    version: release-4.17  # Replace with a valid branch/tag name
+    version: release-3.11  # Replace with a valid branch/tag name
   become: yes
   become_user: vagrant
 - package:
