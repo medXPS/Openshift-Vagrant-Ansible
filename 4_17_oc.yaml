@@ -1,0 +1,145 @@
+---
+- name: Install OpenShift 4.17
+  hosts: admin1
+  become: yes
+  vars:
+    ocp_version: "4.17"
+    base_domain: "example.com"
+    cluster_name: "my-cluster"
+    api_vip: "192.168.50.10"
+    http_port: 8080
+    install_dir: "/home/vagrant/openshift-install"
+    master_ign_url: "http://192.168.50.10:8080/master.ign"
+    worker_ign_url: "http://192.168.50.10:8080/worker.ign"
+
+  tasks:
+    - name: Ensure required packages are installed
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - curl
+        - python3
+        - tar
+
+    - name: Download OpenShift Installer
+      get_url:
+        url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-{{ ocp_version }}/openshift-install-linux.tar.gz"
+        dest: "/tmp/openshift-install-linux.tar.gz"
+
+    - name: Extract OpenShift Installer
+      unarchive:
+        src: "/tmp/openshift-install-linux.tar.gz"
+        dest: "/usr/local/bin/"
+        remote_src: yes
+
+    - name: Download OpenShift CLI
+      get_url:
+        url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-{{ ocp_version }}/openshift-client-linux.tar.gz"
+        dest: "/tmp/openshift-client-linux.tar.gz"
+
+    - name: Extract OpenShift CLI (oc and kubectl)
+      unarchive:
+        src: "/tmp/openshift-client-linux.tar.gz"
+        dest: "/usr/local/bin/"
+        remote_src: yes
+
+    - name: Create install directory
+      file:
+        path: "{{ install_dir }}"
+        state: directory
+        owner: vagrant
+        mode: 0755
+
+    - name: Generate install-config.yaml
+      copy:
+        dest: "{{ install_dir }}/install-config.yaml"
+        content: |
+          apiVersion: v1
+          baseDomain: {{ base_domain }}
+          metadata:
+            name: {{ cluster_name }}
+          platform:
+            none: {}
+          controlPlane:
+            name: master
+            replicas: 1
+          compute:
+            - name: worker
+              replicas: 2
+          networking:
+            networkType: OpenShiftSDN
+            clusterNetwork:
+              - cidr: 10.128.0.0/14
+                hostPrefix: 23
+            serviceNetwork:
+              - 172.30.0.0/16
+
+    - name: Create Ignition config files
+      command: "openshift-install create ignition-configs --dir {{ install_dir }}"
+      args:
+        chdir: "{{ install_dir }}"
+
+    - name: Serve Ignition files via HTTP
+      shell: "python3 -m http.server {{ http_port }} &"
+      args:
+        chdir: "{{ install_dir }}"
+      async: 3600
+      poll: 0
+      tags: start_http
+
+    - name: Install CoreOS on master node
+      shell: |
+        ssh -o StrictHostKeyChecking=no vagrant@192.168.50.20 \
+        "sudo coreos-installer install /dev/sda --ignition-url {{ master_ign_url }}"
+
+    - name: Reboot master node
+      shell: |
+        ssh -o StrictHostKeyChecking=no vagrant@192.168.50.20 \
+        "sudo reboot"
+
+    - name: Install CoreOS on worker nodes
+      shell: |
+        ssh -o StrictHostKeyChecking=no vagrant@192.168.50.21 \
+        "sudo coreos-installer install /dev/sda --ignition-url {{ worker_ign_url }}"
+      register: worker1
+
+    - name: Install CoreOS on second worker node
+      shell: |
+        ssh -o StrictHostKeyChecking=no vagrant@192.168.50.22 \
+        "sudo coreos-installer install /dev/sda --ignition-url {{ worker_ign_url }}"
+      when: worker1 is succeeded
+
+    - name: Reboot worker1
+      shell: |
+        ssh -o StrictHostKeyChecking=no vagrant@192.168.50.21 \
+        "sudo reboot"
+
+    - name: Reboot worker2
+      shell: |
+        ssh -o StrictHostKeyChecking=no vagrant@192.168.50.22 \
+        "sudo reboot"
+
+    - name: Wait for master node to be ready
+      wait_for:
+        host: 192.168.50.20
+        port: 22
+        delay: 30
+        timeout: 600
+
+    - name: Wait for worker nodes to be ready
+      wait_for:
+        host: 192.168.50.21
+        port: 22
+        delay: 30
+        timeout: 600
+
+    - name: Create OpenShift cluster
+      command: "openshift-install create cluster --dir {{ install_dir }}"
+      args:
+        chdir: "{{ install_dir }}"
+
+    - name: Monitor installation logs
+      shell: "openshift-install wait-for install-complete --log-level=info --dir {{ install_dir }}"
+      args:
+        chdir: "{{ install_dir }}"

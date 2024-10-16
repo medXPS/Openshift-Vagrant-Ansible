@@ -156,7 +156,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     pip3 install --upgrade pip
     pip3 install ansible==2.9.27  # Install compatible version of Ansible
     pip3 install pyOpenSSL
-    yum install -y libselinux-python
+    yum install -y python3-libselinux
   SHELL
   
     if Vagrant.has_plugin?('vagrant-reload')
@@ -231,39 +231,39 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.install        = true
       ansible.limit          = 'OSEv3:localhost'
       ansible.provisioning_path = '/home/vagrant/sync'
-      ansible.playbook       = '/home/vagrant/sync/install.yaml'
+      ansible.playbook       = '/home/vagrant/sync/4_17_oc.yaml'
       ansible.groups = ansible_groups
       ansible.host_vars = ansible_host_vars
     end
 
-    admin1.vm.provision :ansible_local do |ansible|
-      ansible.verbose        = true
-      ansible.install        = false
-      ansible.limit          = "OSEv3:localhost"
-      ansible.provisioning_path = '/home/vagrant/sync'
-      ansible.playbook = "/home/vagrant/openshift-ansible/playbooks/prerequisites.yml"
-      ansible.groups = ansible_groups
-      ansible.host_vars = ansible_host_vars
-    end
+    # admin1.vm.provision :ansible_local do |ansible|
+    #   ansible.verbose        = true
+    #   ansible.install        = false
+    #   ansible.limit          = "OSEv3:localhost"
+    #   ansible.provisioning_path = '/home/vagrant/sync'
+    #   ansible.playbook = "/home/vagrant/openshift-ansible/playbooks/prerequisites.yml"
+    #   ansible.groups = ansible_groups
+    #   ansible.host_vars = ansible_host_vars
+    # end
 
-    admin1.vm.provision :ansible_local do |ansible|
-      ansible.verbose        = true
-      ansible.install        = false
-      ansible.limit          = "OSEv3:localhost"
-      ansible.provisioning_path = '/home/vagrant/sync'
-      ansible.playbook = "/home/vagrant/openshift-ansible/playbooks/deploy_cluster.yml"
-      ansible.groups = ansible_groups
-      ansible.host_vars = ansible_host_vars
-    end
+    # admin1.vm.provision :ansible_local do |ansible|
+    #   ansible.verbose        = true
+    #   ansible.install        = false
+    #   ansible.limit          = "OSEv3:localhost"
+    #   ansible.provisioning_path = '/home/vagrant/sync'
+    #   ansible.playbook = "/home/vagrant/openshift-ansible/playbooks/deploy_cluster.yml"
+    #   ansible.groups = ansible_groups
+    #   ansible.host_vars = ansible_host_vars
+    # end
 
-    admin1.vm.provision :ansible_local do |ansible|
-      ansible.verbose        = true
-      ansible.install        = false
-      ansible.limit          = "OSEv3:localhost"
-      ansible.provisioning_path = '/home/vagrant/sync'
-      ansible.playbook = "/home/vagrant/sync/tasks/post-install.yaml"
-      ansible.groups = ansible_groups
-      ansible.host_vars = ansible_host_vars
-    end
+    # admin1.vm.provision :ansible_local do |ansible|
+    #   ansible.verbose        = true
+    #   ansible.install        = false
+    #   ansible.limit          = "OSEv3:localhost"
+    #   ansible.provisioning_path = '/home/vagrant/sync'
+    #   ansible.playbook = "/home/vagrant/sync/tasks/post-install.yaml"
+    #   ansible.groups = ansible_groups
+    #   ansible.host_vars = ansible_host_vars
+    # end
   end
 end
