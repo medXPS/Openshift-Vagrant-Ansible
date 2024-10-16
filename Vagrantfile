@@ -97,6 +97,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       yum -y install python3 python3-pip  # Install Python 3.9 and pip3
       pip3 install --upgrade pip
       pip3 install pyOpenSSL
+      yum install -y python3-libselinux
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       # Reboot machine
@@ -115,6 +116,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       yum -y install python3 python3-pip  # Install Python 3.9 and pip3
       pip3 install --upgrade pip
       pip3 install pyOpenSSL
+      yum install -y python3-libselinux
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node1.vm.provision :reload
@@ -132,6 +134,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       yum -y install python3 python3-pip  # Install Python 3.9 and pip3
       pip3 install --upgrade pip
       pip3 install pyOpenSSL
+      yum install -y python3-libselinux
     SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node2.vm.provision :reload
@@ -153,6 +156,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     pip3 install --upgrade pip
     pip3 install ansible==2.9.27  # Install compatible version of Ansible
     pip3 install pyOpenSSL
+    yum install -y python3-libselinux
   SHELL
   
     if Vagrant.has_plugin?('vagrant-reload')
