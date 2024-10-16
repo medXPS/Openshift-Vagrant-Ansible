@@ -136,7 +136,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     if Vagrant.has_plugin?('vagrant-reload')
       node2.vm.provision :reload
     end
-  end
+  end 
 
   config.vm.define "admin1" do |admin1|
     admin1.vm.network :private_network, ip: "#{NETWORK_BASE}.#{INTEGRATION_START_SEGMENT + 3}"

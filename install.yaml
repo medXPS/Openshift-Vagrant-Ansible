@@ -22,17 +22,15 @@
   tasks:
     - include: tasks/install_bootstrap_origin.yaml
 
-- name: Add OpenShift Origin repository (alternative for CentOS 8)
+- name: Add EPEL repository for CentOS 9 Stream
   hosts: all
   tasks:
-    - name: Enable CentOS 8 PowerTools and EPEL repositories
+    - name: Enable EPEL repository for CentOS 9
       yum:
-        name:
-          - epel-release
-          - centos-release-stream
+        name: epel-release
         state: present
 
-    - name: Install necessary dependencies for OpenShift on CentOS 8
+    - name: Install necessary dependencies for OpenShift on CentOS 9 Stream
       yum:
         name:
           - wget
