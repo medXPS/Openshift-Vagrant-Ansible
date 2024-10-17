@@ -30,6 +30,7 @@ Vagrant.configure("2") do |config|
 
   # Load Balancer node (Optional, runs Ansible playbook)
   config.vm.define :lb, autostart: false do |node|
+    node.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "rsync"
     node.vm.box = "boxomatic/centos-stream-9"
     node.vm.network :private_network, ip: "192.168.100.2"
     node.vm.hostname = "lb.adria-bt.com"
