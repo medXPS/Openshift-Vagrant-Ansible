@@ -144,7 +144,7 @@ box_name = 'boxomatic/centos-stream-9'
 NETWORK_BASE = '192.168.100'  # Adjusted Network for this use case
 INTEGRATION_START_SEGMENT = 20
 
-REQUIRED_PLUGINS = %w(vagrant-hostmanager vagrant-sshfs landrush)
+REQUIRED_PLUGINS = %w(vagrant-hostmanager  landrush)
 SUGGESTED_PLUGINS = %w(vagrant-reload)
 
 def message(name)
