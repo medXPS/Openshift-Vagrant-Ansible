@@ -13,14 +13,14 @@ puts %Q{ This machine has the IP '#{localmachineip} and host name '#{hostname}'}
 
 
 
-REQUIRED_PLUGINS = %w(vagrant-hostmanager vagrant-sshfs landrush)
-SUGGESTED_PLUGINS = %w(vagrant-reload)
+REQUIRED_PLUGINS = %w(vagrant-hostmanager  landrush)
+
 
 def message(name)
   "#{name} plugin is not installed, run `vagrant plugin install #{name}` to install it."
 end
 
-SUGGESTED_PLUGINS.each { |plugin| print("note: " + message(plugin) + "\n") unless Vagrant.has_plugin?(plugin) }
+
 
 errors = []
 
