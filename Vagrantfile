@@ -227,6 +227,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     echo "deltarpm_percentage=0" >> /etc/yum.conf
     yum -y update
     # yum install dnsmasq
+    yum install ansible -y
   SHELL
 
     # Provision with Ansible playbook
