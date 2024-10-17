@@ -67,6 +67,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node.vm.provision "ansible" do |ansible|
       ansible.playbook = "/home/vagrant/sync/ansible/lb.yml"
     end
+
+    if Vagrant.has_plugin?('vagrant-reload')
+      node.vm.provision :reload
+    end
   end
 
   # Bootstrap node
@@ -79,6 +83,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.memory = 2048
       vb.cpus = 2
     end
+
+    if Vagrant.has_plugin?('vagrant-reload')
+      node.vm.provision :reload
+    end
   end
 
   # Control plane node (master node)
@@ -90,6 +98,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node.vm.provider :virtualbox do |vb|
       vb.memory = 2048
       vb.cpus = 2
+    end
+
+    if Vagrant.has_plugin?('vagrant-reload')
+      node.vm.provision :reload
     end
   end
 
@@ -107,6 +119,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provider :virtualbox do |vb|
         vb.memory = 2048
         vb.cpus = 2
+      end
+
+      if Vagrant.has_plugin?('vagrant-reload')
+        node.vm.provision :reload
       end
     end
   end
