@@ -1,13 +1,9 @@
 ---
 - name: Install dnsmasq
   yum:
-    name: "{{ packages }}"
+    name: dnsmasq
     state: present
-    update_cache: "yes"
-  vars:
-    packages:
-      - dnsmasq
-      - NetworkManager-glib
+    update_cache: yes
 
 - name: Copy in dnsmasq config
   copy:
@@ -22,11 +18,11 @@
 - name: Start service dnsmasq, if not started
   service:
     name: dnsmasq
-    daemon_reload: "yes"
+    daemon_reload: yes
     state: started
-    enabled: "yes"
+    enabled: yes
 
-- name:
+- name: Configure NetworkManager DNS settings
   nmcli:
     conn_name: "System eth0"
     dns4: 127.0.0.1
@@ -35,3 +31,15 @@
   when: '"127.0.0.1" not in ansible_dns.nameservers'
   notify:
     - restart_NetworkManager
+
+# Handlers
+handlers:
+  - name: restart_dnsmasq
+    service:
+      name: dnsmasq
+      state: restarted
+
+  - name: restart_NetworkManager
+    service:
+      name: NetworkManager
+      state: restarted
