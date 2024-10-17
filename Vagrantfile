@@ -57,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :lb do |node|
     node.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "rsync"
     node.vm.box = "boxomatic/centos-stream-9"
-    node.vm.network :private_network, ip: "192.168.100.2"
+    node.vm.network :private_network, ip: "192.168.100.2", nic_type: "virtio", auto_config: true
     node.vm.hostname = "lb.adria-bt.com"
     node.hostmanager.aliases = %w(lb)
     node.vm.provider :virtualbox do |vb|
@@ -76,7 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Bootstrap node
   config.vm.define :bootstrap do |node|
     node.vm.box = "boxomatic/centos-stream-9"
-    node.vm.network :private_network, ip: "192.168.100.5", mac: "525400A86405"
+    node.vm.network :private_network, ip: "192.168.100.5", mac: "525400A86405", nic_type: "virtio", auto_config: true
     node.vm.hostname = "bootstrap.adria-bt.com"
     node.hostmanager.aliases = %w(bootstrap)
     node.vm.provider :virtualbox do |vb|
@@ -92,7 +92,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Control plane node (master node)
   config.vm.define :cp0 do |node|
     node.vm.box = "boxomatic/centos-stream-9"
-    node.vm.network :private_network, ip: "192.168.100.10", mac: "525400A8640A"
+    node.vm.network :private_network, ip: "192.168.100.10", mac: "525400A8640A", nic_type: "virtio", auto_config: true
     node.vm.hostname = "cp0.adria-bt.com"
     node.hostmanager.aliases = %w(cp0)
     node.vm.provider :virtualbox do |vb|
@@ -113,7 +113,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   (0..0).each do |node_num|
     config.vm.define "worker#{node_num}" do |node|
       node.vm.box = "boxomatic/centos-stream-9"
-      node.vm.network :private_network, ip: "192.168.100.2#{node_num + 1}", mac: mac_addresses[node_num]
+      node.vm.network :private_network, ip: "192.168.100.2#{node_num + 1}", mac: mac_addresses[node_num], nic_type: "virtio", auto_config: true
       node.vm.hostname = "worker#{node_num}.adria-bt.com"
       node.hostmanager.aliases = %W(worker#{node_num})
       node.vm.provider :virtualbox do |vb|
