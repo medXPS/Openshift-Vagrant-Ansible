@@ -3,15 +3,56 @@
 
 # Vagrant configuration file
 
-Vagrant.configure("2") do |config|
-  # Global VirtualBox provider configuration
-  config.vm.provider :virtualbox do |vb|
-    vb.cpus = 2
-    vb.memory = 2048
-  end
+require 'socket'
+
+hostname = Socket.gethostname
+localmachineip = IPSocket.getaddress(Socket.gethostname)
+puts %Q{ This machine has the IP '#{localmachineip} and host name '#{hostname}'}
+
+
+
+
+
+REQUIRED_PLUGINS = %w(vagrant-hostmanager vagrant-sshfs landrush)
+SUGGESTED_PLUGINS = %w(vagrant-reload)
+
+def message(name)
+  "#{name} plugin is not installed, run `vagrant plugin install #{name}` to install it."
+end
+
+SUGGESTED_PLUGINS.each { |plugin| print("note: " + message(plugin) + "\n") unless Vagrant.has_plugin?(plugin) }
+
+errors = []
+
+# Validate and collect error message if plugin is not installed
+REQUIRED_PLUGINS.each { |plugin| errors << message(plugin) unless Vagrant.has_plugin?(plugin) }
+unless errors.empty?
+  msg = errors.size > 1 ? "Errors: \n* #{errors.join("\n* ")}" : "Error: #{errors.first}"
+  fail Vagrant::Errors::VagrantError.new, msg
+end
+
+
+
+###VARIABLES#####
+VAGRANTFILE_API_VERSION = '2'
+NETWORK_BASE = '192.168.100'
+
+
+
+
 
   # Disable synced folder
   #config.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "rsync"
+  Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  Vagrant.configure("2") do |config|
+      # Global VirtualBox provider configuration
+      config.vm.provider :virtualbox do |vb|
+        vb.cpus = 2
+        vb.memory = 2048
+  end
+
+
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.provision "shell", path: "provision/setup.sh", args: [NETWORK_BASE]
@@ -85,4 +126,5 @@ Vagrant.configure("2") do |config|
       end
     end
   end
+end
 end
