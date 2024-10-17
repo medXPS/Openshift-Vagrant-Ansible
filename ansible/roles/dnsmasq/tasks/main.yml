@@ -32,14 +32,3 @@
   notify:
     - restart_NetworkManager
 
-# Handlers
-handlers:
-  - name: restart_dnsmasq
-    service:
-      name: dnsmasq
-      state: restarted
-
-  - name: restart_NetworkManager
-    service:
-      name: NetworkManager
-      state: restarted
