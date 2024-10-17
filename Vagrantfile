@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   end
 
   # Disable synced folder
-  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "rsync"
 
   # Enable hostmanager plugin to manage hosts
   config.hostmanager.enabled = true
@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
       vb.memory = 2048
     end
     node.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/lb.yml"
+      ansible.playbook = "/home/vagrant/sync/ansible/lb.yml"
     end
   end
 
