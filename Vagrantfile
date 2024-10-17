@@ -202,7 +202,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.memory = 2048
       vb.cpus = 2
     end
-
+    node.vm.provision "shell", inline: <<-SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    yum -y update
+    yum install dnsmasq
+  SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node.vm.provision :reload
     end
@@ -219,6 +223,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.memory = 2048
       vb.cpus = 2
     end
+    node.vm.provision "shell", inline: <<-SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    yum -y update
+    yum install dnsmasq
+  SHELL
 
     # Provision with Ansible playbook
     node.vm.provision "ansible" do |ansible|
@@ -240,7 +249,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.memory = 2048
       vb.cpus = 2
     end
-
+    node.vm.provision "shell", inline: <<-SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    yum -y update
+    yum install dnsmasq
+  SHELL
     if Vagrant.has_plugin?('vagrant-reload')
       node.vm.provision :reload
     end
@@ -256,6 +269,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.memory = 2048
       vb.cpus = 2
     end
+    node.vm.provision "shell", inline: <<-SHELL
+    echo "deltarpm_percentage=0" >> /etc/yum.conf
+    yum -y update
+    yum install dnsmasq
+  SHELL
 
     if Vagrant.has_plugin?('vagrant-reload')
       node.vm.provision :reload
