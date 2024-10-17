@@ -14,10 +14,12 @@ Vagrant.configure("2") do |config|
   #config.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "rsync"
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.provision "shell", path: "provision/setup.sh", args: [NETWORK_BASE]
   # Enable hostmanager plugin to manage hosts
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.ignore_private_ip = false
+ 
 
   # Enable landrush plugin for DNS resolution
   if Vagrant.has_plugin?('landrush')
