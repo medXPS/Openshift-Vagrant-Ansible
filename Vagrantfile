@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
   # Bootstrap node
   config.vm.define :bootstrap do |node|
     node.vm.box = "boxomatic/centos-stream-9"
-    node.vm.network :private_network, ip: "192.168.100.5", mac: "52:54:00:A8:64:05"
+    node.vm.network :private_network, ip: "192.168.100.5", mac: "525400A86405"
     node.vm.hostname = "bootstrap.adria-bt.com"
     node.hostmanager.aliases = %w(bootstrap)
     node.vm.provider :virtualbox do |vb|
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
   # Control plane node (master node)
   config.vm.define :cp0 do |node|
     node.vm.box = "boxomatic/centos-stream-9"
-    node.vm.network :private_network, ip: "192.168.100.10", mac: "52:54:00:A8:64:0A"
+    node.vm.network :private_network, ip: "192.168.100.10", mac: "525400A8640A"
     node.vm.hostname = "cp0.adria-bt.com"
     node.hostmanager.aliases = %w(cp0)
     node.vm.provider :virtualbox do |vb|
@@ -66,7 +66,7 @@ Vagrant.configure("2") do |config|
 
   # Worker nodes
   mac_addresses = [
-    "52:54:00:A8:64:0B", # MAC for worker0
+    "525400A8640B", # MAC for worker0
   ]
 
   (0..0).each do |node_num|
