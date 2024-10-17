@@ -11,7 +11,8 @@ Vagrant.configure("2") do |config|
   end
 
   # Disable synced folder
-  config.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "virtualbox"
+  config.vm.synced_folder "/mnt/c/Users/mamma/Documents/Openshift-Vagrant-Ansible", "/home/vagrant/sync", type: "rsync"
+
 
   # Enable hostmanager plugin to manage hosts
   config.hostmanager.enabled = true
